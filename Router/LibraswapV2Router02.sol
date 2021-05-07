@@ -39,8 +39,8 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         uint amountBMin
     ) internal virtual returns (uint amountA, uint amountB) {
         // create the pair if it doesn't exist yet
-        if (LibraswapFactory(factory).getPair(tokenA, tokenB) == address(0)) {
-            LibraswapFactory(factory).createPair(tokenA, tokenB);
+        if (ILibraswapFactory(factory).getPair(tokenA, tokenB) == address(0)) {
+            ILibraswapFactory(factory).createPair(tokenA, tokenB);
         }
         (uint reserveA, uint reserveB) = LibraswapLibrary.getReserves(factory, tokenA, tokenB);
         if (reserveA == 0 && reserveB == 0) {
