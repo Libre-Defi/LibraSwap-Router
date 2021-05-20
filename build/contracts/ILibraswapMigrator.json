@@ -1,0 +1,509 @@
+{
+  "contractName": "ILibraswapMigrator",
+  "abi": [
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "token",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountTokenMin",
+          "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amountETHMin",
+          "type": "uint256"
+        },
+        {
+          "internalType": "address",
+          "name": "to",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "deadline",
+          "type": "uint256"
+        }
+      ],
+      "name": "migrate",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    }
+  ],
+  "metadata": "{\"compiler\":{\"version\":\"0.6.6+commit.6c089d02\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[{\"internalType\":\"address\",\"name\":\"token\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"amountTokenMin\",\"type\":\"uint256\"},{\"internalType\":\"uint256\",\"name\":\"amountETHMin\",\"type\":\"uint256\"},{\"internalType\":\"address\",\"name\":\"to\",\"type\":\"address\"},{\"internalType\":\"uint256\",\"name\":\"deadline\",\"type\":\"uint256\"}],\"name\":\"migrate\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"/D/User/Ethereum/LibraSwap-Router/contracts/interfaces/ILibraswapMigrator.sol\":\"ILibraswapMigrator\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"/D/User/Ethereum/LibraSwap-Router/contracts/interfaces/ILibraswapMigrator.sol\":{\"keccak256\":\"0xff92062d3744e01d72f15a0b5df56dbd5b639a2b3ab79ee3f5a89325f810b9af\",\"urls\":[\"bzz-raw://b7ea6c8507599961cb130a32cc3cfd66bace4c3e65f5dfc8c7cb67552ddd0e53\",\"dweb:/ipfs/QmUrifNURUAYYxcTuFV5BBxHGJuwU2kXqzYWEv1yBcCQiR\"]}},\"version\":1}",
+  "bytecode": "0x",
+  "deployedBytecode": "0x",
+  "immutableReferences": {},
+  "sourceMap": "",
+  "deployedSourceMap": "",
+  "source": "pragma solidity >=0.5.0;\r\n\r\ninterface ILibraswapMigrator {\r\n    function migrate(address token, uint amountTokenMin, uint amountETHMin, address to, uint deadline) external;\r\n}\r\n",
+  "sourcePath": "D:\\User\\Ethereum\\LibraSwap-Router\\contracts\\interfaces\\ILibraswapMigrator.sol",
+  "ast": {
+    "absolutePath": "/D/User/Ethereum/LibraSwap-Router/contracts/interfaces/ILibraswapMigrator.sol",
+    "exportedSymbols": {
+      "ILibraswapMigrator": [
+        2190
+      ]
+    },
+    "id": 2191,
+    "nodeType": "SourceUnit",
+    "nodes": [
+      {
+        "id": 2176,
+        "literals": [
+          "solidity",
+          ">=",
+          "0.5",
+          ".0"
+        ],
+        "nodeType": "PragmaDirective",
+        "src": "0:24:6"
+      },
+      {
+        "abstract": false,
+        "baseContracts": [],
+        "contractDependencies": [],
+        "contractKind": "interface",
+        "documentation": null,
+        "fullyImplemented": false,
+        "id": 2190,
+        "linearizedBaseContracts": [
+          2190
+        ],
+        "name": "ILibraswapMigrator",
+        "nodeType": "ContractDefinition",
+        "nodes": [
+          {
+            "body": null,
+            "documentation": null,
+            "functionSelector": "b7df1d25",
+            "id": 2189,
+            "implemented": false,
+            "kind": "function",
+            "modifiers": [],
+            "name": "migrate",
+            "nodeType": "FunctionDefinition",
+            "overrides": null,
+            "parameters": {
+              "id": 2187,
+              "nodeType": "ParameterList",
+              "parameters": [
+                {
+                  "constant": false,
+                  "id": 2178,
+                  "mutability": "mutable",
+                  "name": "token",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2189,
+                  "src": "81:13:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2177,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "81:7:6",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2180,
+                  "mutability": "mutable",
+                  "name": "amountTokenMin",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2189,
+                  "src": "96:19:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2179,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "96:4:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2182,
+                  "mutability": "mutable",
+                  "name": "amountETHMin",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2189,
+                  "src": "117:17:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2181,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "117:4:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2184,
+                  "mutability": "mutable",
+                  "name": "to",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2189,
+                  "src": "136:10:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_address",
+                    "typeString": "address"
+                  },
+                  "typeName": {
+                    "id": 2183,
+                    "name": "address",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "136:7:6",
+                    "stateMutability": "nonpayable",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_address",
+                      "typeString": "address"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                },
+                {
+                  "constant": false,
+                  "id": 2186,
+                  "mutability": "mutable",
+                  "name": "deadline",
+                  "nodeType": "VariableDeclaration",
+                  "overrides": null,
+                  "scope": 2189,
+                  "src": "148:13:6",
+                  "stateVariable": false,
+                  "storageLocation": "default",
+                  "typeDescriptions": {
+                    "typeIdentifier": "t_uint256",
+                    "typeString": "uint256"
+                  },
+                  "typeName": {
+                    "id": 2185,
+                    "name": "uint",
+                    "nodeType": "ElementaryTypeName",
+                    "src": "148:4:6",
+                    "typeDescriptions": {
+                      "typeIdentifier": "t_uint256",
+                      "typeString": "uint256"
+                    }
+                  },
+                  "value": null,
+                  "visibility": "internal"
+                }
+              ],
+              "src": "80:82:6"
+            },
+            "returnParameters": {
+              "id": 2188,
+              "nodeType": "ParameterList",
+              "parameters": [],
+              "src": "171:0:6"
+            },
+            "scope": 2190,
+            "src": "64:108:6",
+            "stateMutability": "nonpayable",
+            "virtual": false,
+            "visibility": "external"
+          }
+        ],
+        "scope": 2191,
+        "src": "28:147:6"
+      }
+    ],
+    "src": "0:177:6"
+  },
+  "legacyAST": {
+    "attributes": {
+      "absolutePath": "/D/User/Ethereum/LibraSwap-Router/contracts/interfaces/ILibraswapMigrator.sol",
+      "exportedSymbols": {
+        "ILibraswapMigrator": [
+          2190
+        ]
+      }
+    },
+    "children": [
+      {
+        "attributes": {
+          "literals": [
+            "solidity",
+            ">=",
+            "0.5",
+            ".0"
+          ]
+        },
+        "id": 2176,
+        "name": "PragmaDirective",
+        "src": "0:24:6"
+      },
+      {
+        "attributes": {
+          "abstract": false,
+          "baseContracts": [
+            null
+          ],
+          "contractDependencies": [
+            null
+          ],
+          "contractKind": "interface",
+          "documentation": null,
+          "fullyImplemented": false,
+          "linearizedBaseContracts": [
+            2190
+          ],
+          "name": "ILibraswapMigrator",
+          "scope": 2191
+        },
+        "children": [
+          {
+            "attributes": {
+              "body": null,
+              "documentation": null,
+              "functionSelector": "b7df1d25",
+              "implemented": false,
+              "isConstructor": false,
+              "kind": "function",
+              "modifiers": [
+                null
+              ],
+              "name": "migrate",
+              "overrides": null,
+              "scope": 2190,
+              "stateMutability": "nonpayable",
+              "virtual": false,
+              "visibility": "external"
+            },
+            "children": [
+              {
+                "children": [
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "token",
+                      "overrides": null,
+                      "scope": 2189,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 2177,
+                        "name": "ElementaryTypeName",
+                        "src": "81:7:6"
+                      }
+                    ],
+                    "id": 2178,
+                    "name": "VariableDeclaration",
+                    "src": "81:13:6"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "amountTokenMin",
+                      "overrides": null,
+                      "scope": 2189,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2179,
+                        "name": "ElementaryTypeName",
+                        "src": "96:4:6"
+                      }
+                    ],
+                    "id": 2180,
+                    "name": "VariableDeclaration",
+                    "src": "96:19:6"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "amountETHMin",
+                      "overrides": null,
+                      "scope": 2189,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2181,
+                        "name": "ElementaryTypeName",
+                        "src": "117:4:6"
+                      }
+                    ],
+                    "id": 2182,
+                    "name": "VariableDeclaration",
+                    "src": "117:17:6"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "to",
+                      "overrides": null,
+                      "scope": 2189,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "address",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "address",
+                          "stateMutability": "nonpayable",
+                          "type": "address"
+                        },
+                        "id": 2183,
+                        "name": "ElementaryTypeName",
+                        "src": "136:7:6"
+                      }
+                    ],
+                    "id": 2184,
+                    "name": "VariableDeclaration",
+                    "src": "136:10:6"
+                  },
+                  {
+                    "attributes": {
+                      "constant": false,
+                      "mutability": "mutable",
+                      "name": "deadline",
+                      "overrides": null,
+                      "scope": 2189,
+                      "stateVariable": false,
+                      "storageLocation": "default",
+                      "type": "uint256",
+                      "value": null,
+                      "visibility": "internal"
+                    },
+                    "children": [
+                      {
+                        "attributes": {
+                          "name": "uint",
+                          "type": "uint256"
+                        },
+                        "id": 2185,
+                        "name": "ElementaryTypeName",
+                        "src": "148:4:6"
+                      }
+                    ],
+                    "id": 2186,
+                    "name": "VariableDeclaration",
+                    "src": "148:13:6"
+                  }
+                ],
+                "id": 2187,
+                "name": "ParameterList",
+                "src": "80:82:6"
+              },
+              {
+                "attributes": {
+                  "parameters": [
+                    null
+                  ]
+                },
+                "children": [],
+                "id": 2188,
+                "name": "ParameterList",
+                "src": "171:0:6"
+              }
+            ],
+            "id": 2189,
+            "name": "FunctionDefinition",
+            "src": "64:108:6"
+          }
+        ],
+        "id": 2190,
+        "name": "ContractDefinition",
+        "src": "28:147:6"
+      }
+    ],
+    "id": 2191,
+    "name": "SourceUnit",
+    "src": "0:177:6"
+  },
+  "compiler": {
+    "name": "solc",
+    "version": "0.6.6+commit.6c089d02.Emscripten.clang"
+  },
+  "networks": {},
+  "schemaVersion": "3.3.4",
+  "updatedAt": "2021-05-20T02:16:03.820Z",
+  "devdoc": {
+    "methods": {}
+  },
+  "userdoc": {
+    "methods": {}
+  }
+}
