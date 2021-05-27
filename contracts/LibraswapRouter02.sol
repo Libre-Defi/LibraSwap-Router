@@ -1,6 +1,6 @@
 pragma solidity =0.6.6;
 
-import './interfaces/ILibraswapFactory.sol';
+import '../interfaces/ILibraswapFactory.sol';
 import './libraries/TransferHelper.sol';
 
 import './interfaces/ILibraswapRouter02.sol';
@@ -14,7 +14,10 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
 
     address public immutable override factory;
     address public immutable override WETH;
-
+    uint public PROMOTION_START;
+    uint public constant PROMOTION_PERIOD = 7 days;
+    mapping (address => uint32) public airdrop_whitelist;
+ 
     modifier ensure(uint deadline) {
         require(deadline >= block.timestamp, 'LibraswapRouter: EXPIRED');
         _;
@@ -23,6 +26,8 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
     constructor(address _factory, address _WETH) public {
         factory = _factory;
         WETH = _WETH;
+        PROMOTION_START = now;
+
     }
 
     receive() external payable {
@@ -74,7 +79,35 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
         liquidity = ILibraPair(pair).mint(to);
     }
-
+    function addLiquidityTest(
+        address tokenA,
+        address tokenB,
+        // uint amountADesired,
+        // uint amountBDesired,
+        // uint amountAMin,
+        // uint amountBMin,
+        address to
+    ) public view virtual returns (address pair) {
+        // (uint reserveA, uint reserveB) = LibraswapLibrary.getReserves(factory, tokenA, tokenB);
+/*
+        if (reserveA == 0 && reserveB == 0) {
+            (amountA, amountB) = (amountADesired, amountBDesired);
+        } else {
+            uint amountBOptimal = LibraswapLibrary.quote(amountADesired, reserveA, reserveB);
+            if (amountBOptimal <= amountBDesired) {
+                require(amountBOptimal >= amountBMin, 'LibraswapRouter: INSUFFICIENT_B_AMOUNT');
+                (amountA, amountB) = (amountADesired, amountBOptimal);
+            } else {
+                uint amountAOptimal = LibraswapLibrary.quote(amountBDesired, reserveB, reserveA);
+                assert(amountAOptimal <= amountADesired);
+                require(amountAOptimal >= amountAMin, 'LibraswapRouter: INSUFFICIENT_A_AMOUNT');
+                (amountA, amountB) = (amountAOptimal, amountBDesired);
+            }
+        }
+*/
+        address pair = LibraswapLibrary.pairFor(factory, tokenA, tokenB);
+        return (pair);
+    }
     function addLiquidityETH(
         address token,
         uint amountTokenDesired,
