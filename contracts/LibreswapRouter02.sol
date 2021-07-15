@@ -1,15 +1,15 @@
 pragma solidity =0.6.6;
 
-import '../interfaces/ILibraswapFactory.sol';
+import '../interfaces/ILibreswapFactory.sol';
 import './libraries/TransferHelper.sol';
 
-import './interfaces/ILibraswapRouter02.sol';
-import './libraries/LibraswapLibrary.sol';
+import './interfaces/ILibreswapRouter02.sol';
+import './libraries/LibreswapLibrary.sol';
 import './libraries/SafeMath.sol';
 import './interfaces/IERC20.sol';
 import './interfaces/IWETH.sol';
 
-contract LibraswapRouter02 is ILibraswapRouter02 {
+contract LibreswapRouter02 is ILibreswapRouter02 {
     using SafeMath for uint;
 
     address public immutable override factory;
@@ -19,7 +19,7 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
     mapping (address => uint32) public airdrop_whitelist;
  
     modifier ensure(uint deadline) {
-        require(deadline >= block.timestamp, 'LibraswapRouter: EXPIRED');
+        require(deadline >= block.timestamp, 'LibreswapRouter: EXPIRED');
         _;
     }
 
@@ -44,21 +44,21 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         uint amountBMin
     ) internal virtual returns (uint amountA, uint amountB) {
         // create the pair if it doesn't exist yet
-        if (ILibraswapFactory(factory).getPair(tokenA, tokenB) == address(0)) {
-            ILibraswapFactory(factory).createPair(tokenA, tokenB);
+        if (ILibreswapFactory(factory).getPair(tokenA, tokenB) == address(0)) {
+            ILibreswapFactory(factory).createPair(tokenA, tokenB);
         }
-        (uint reserveA, uint reserveB) = LibraswapLibrary.getReserves(factory, tokenA, tokenB);
+        (uint reserveA, uint reserveB) = LibreswapLibrary.getReserves(factory, tokenA, tokenB);
         if (reserveA == 0 && reserveB == 0) {
             (amountA, amountB) = (amountADesired, amountBDesired);
         } else {
-            uint amountBOptimal = LibraswapLibrary.quote(amountADesired, reserveA, reserveB);
+            uint amountBOptimal = LibreswapLibrary.quote(amountADesired, reserveA, reserveB);
             if (amountBOptimal <= amountBDesired) {
-                require(amountBOptimal >= amountBMin, 'LibraswapRouter: INSUFFICIENT_B_AMOUNT');
+                require(amountBOptimal >= amountBMin, 'LibreswapRouter: INSUFFICIENT_B_AMOUNT');
                 (amountA, amountB) = (amountADesired, amountBOptimal);
             } else {
-                uint amountAOptimal = LibraswapLibrary.quote(amountBDesired, reserveB, reserveA);
+                uint amountAOptimal = LibreswapLibrary.quote(amountBDesired, reserveB, reserveA);
                 assert(amountAOptimal <= amountADesired);
-                require(amountAOptimal >= amountAMin, 'LibraswapRouter: INSUFFICIENT_A_AMOUNT');
+                require(amountAOptimal >= amountAMin, 'LibreswapRouter: INSUFFICIENT_A_AMOUNT');
                 (amountA, amountB) = (amountAOptimal, amountBDesired);
             }
         }
@@ -74,40 +74,12 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         uint deadline
     ) external virtual override ensure(deadline) returns (uint amountA, uint amountB, uint liquidity) {
         (amountA, amountB) = _addLiquidity(tokenA, tokenB, amountADesired, amountBDesired, amountAMin, amountBMin);
-        address pair = LibraswapLibrary.pairFor(factory, tokenA, tokenB);
+        address pair = LibreswapLibrary.pairFor(factory, tokenA, tokenB);
         TransferHelper.safeTransferFrom(tokenA, msg.sender, pair, amountA);
         TransferHelper.safeTransferFrom(tokenB, msg.sender, pair, amountB);
-        liquidity = ILibraPair(pair).mint(to);
+        liquidity = ILibrePair(pair).mint(to);
     }
-    function addLiquidityTest(
-        address tokenA,
-        address tokenB,
-        // uint amountADesired,
-        // uint amountBDesired,
-        // uint amountAMin,
-        // uint amountBMin,
-        address to
-    ) public view virtual returns (address pair) {
-        // (uint reserveA, uint reserveB) = LibraswapLibrary.getReserves(factory, tokenA, tokenB);
-/*
-        if (reserveA == 0 && reserveB == 0) {
-            (amountA, amountB) = (amountADesired, amountBDesired);
-        } else {
-            uint amountBOptimal = LibraswapLibrary.quote(amountADesired, reserveA, reserveB);
-            if (amountBOptimal <= amountBDesired) {
-                require(amountBOptimal >= amountBMin, 'LibraswapRouter: INSUFFICIENT_B_AMOUNT');
-                (amountA, amountB) = (amountADesired, amountBOptimal);
-            } else {
-                uint amountAOptimal = LibraswapLibrary.quote(amountBDesired, reserveB, reserveA);
-                assert(amountAOptimal <= amountADesired);
-                require(amountAOptimal >= amountAMin, 'LibraswapRouter: INSUFFICIENT_A_AMOUNT');
-                (amountA, amountB) = (amountAOptimal, amountBDesired);
-            }
-        }
-*/
-        address pair = LibraswapLibrary.pairFor(factory, tokenA, tokenB);
-        return (pair);
-    }
+
     function addLiquidityETH(
         address token,
         uint amountTokenDesired,
@@ -124,11 +96,11 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
             amountTokenMin,
             amountETHMin
         );
-        address pair = LibraswapLibrary.pairFor(factory, token, WETH);
+        address pair = LibreswapLibrary.pairFor(factory, token, WETH);
         TransferHelper.safeTransferFrom(token, msg.sender, pair, amountToken);
         IWETH(WETH).deposit{value: amountETH}();
         assert(IWETH(WETH).transfer(pair, amountETH));
-        liquidity = ILibraPair(pair).mint(to);
+        liquidity = ILibrePair(pair).mint(to);
         // refund dust eth, if any
         if (msg.value > amountETH) TransferHelper.safeTransferETH(msg.sender, msg.value - amountETH);
     }
@@ -143,13 +115,13 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         address to,
         uint deadline
     ) public virtual override ensure(deadline) returns (uint amountA, uint amountB) {
-        address pair = LibraswapLibrary.pairFor(factory, tokenA, tokenB);
-        ILibraPair(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
-        (uint amount0, uint amount1) = ILibraPair(pair).burn(to);
-        (address token0,) = LibraswapLibrary.sortTokens(tokenA, tokenB);
+        address pair = LibreswapLibrary.pairFor(factory, tokenA, tokenB);
+        ILibrePair(pair).transferFrom(msg.sender, pair, liquidity); // send liquidity to pair
+        (uint amount0, uint amount1) = ILibrePair(pair).burn(to);
+        (address token0,) = LibreswapLibrary.sortTokens(tokenA, tokenB);
         (amountA, amountB) = tokenA == token0 ? (amount0, amount1) : (amount1, amount0);
-        require(amountA >= amountAMin, 'LibraswapRouter: INSUFFICIENT_A_AMOUNT');
-        require(amountB >= amountBMin, 'LibraswapRouter: INSUFFICIENT_B_AMOUNT');
+        require(amountA >= amountAMin, 'LibreswapRouter: INSUFFICIENT_A_AMOUNT');
+        require(amountB >= amountBMin, 'LibreswapRouter: INSUFFICIENT_B_AMOUNT');
     }
     function removeLiquidityETH(
         address token,
@@ -182,9 +154,9 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external virtual override returns (uint amountA, uint amountB) {
-        address pair = LibraswapLibrary.pairFor(factory, tokenA, tokenB);
+        address pair = LibreswapLibrary.pairFor(factory, tokenA, tokenB);
         uint value = approveMax ? uint(-1) : liquidity;
-        ILibraPair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
+        ILibrePair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (amountA, amountB) = removeLiquidity(tokenA, tokenB, liquidity, amountAMin, amountBMin, to, deadline);
     }
     function removeLiquidityETHWithPermit(
@@ -196,9 +168,9 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external virtual override returns (uint amountToken, uint amountETH) {
-        address pair = LibraswapLibrary.pairFor(factory, token, WETH);
+        address pair = LibreswapLibrary.pairFor(factory, token, WETH);
         uint value = approveMax ? uint(-1) : liquidity;
-        ILibraPair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
+        ILibrePair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         (amountToken, amountETH) = removeLiquidityETH(token, liquidity, amountTokenMin, amountETHMin, to, deadline);
     }
 
@@ -233,9 +205,9 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         uint deadline,
         bool approveMax, uint8 v, bytes32 r, bytes32 s
     ) external virtual override returns (uint amountETH) {
-        address pair = LibraswapLibrary.pairFor(factory, token, WETH);
+        address pair = LibreswapLibrary.pairFor(factory, token, WETH);
         uint value = approveMax ? uint(-1) : liquidity;
-        ILibraPair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
+        ILibrePair(pair).permit(msg.sender, address(this), value, deadline, v, r, s);
         amountETH = removeLiquidityETHSupportingFeeOnTransferTokens(
             token, liquidity, amountTokenMin, amountETHMin, to, deadline
         );
@@ -246,11 +218,11 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
     function _swap(uint[] memory amounts, address[] memory path, address _to) internal virtual {
         for (uint i; i < path.length - 1; i++) {
             (address input, address output) = (path[i], path[i + 1]);
-            (address token0,) = LibraswapLibrary.sortTokens(input, output);
+            (address token0,) = LibreswapLibrery.sortTokens(input, output);
             uint amountOut = amounts[i + 1];
             (uint amount0Out, uint amount1Out) = input == token0 ? (uint(0), amountOut) : (amountOut, uint(0));
-            address to = i < path.length - 2 ? LibraswapLibrary.pairFor(factory, output, path[i + 2]) : _to;
-            ILibraPair(LibraswapLibrary.pairFor(factory, input, output)).swap(
+            address to = i < path.length - 2 ? LibreswapLibrary.pairFor(factory, output, path[i + 2]) : _to;
+            ILibrePair(LibreswapLibrary.pairFor(factory, input, output)).swap(
                 amount0Out, amount1Out, to, new bytes(0)
             );
         }
@@ -262,10 +234,10 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         address to,
         uint deadline
     ) external virtual override ensure(deadline) returns (uint[] memory amounts) {
-        amounts = LibraswapLibrary.getAmountsOut(factory, amountIn, path);
-        require(amounts[amounts.length - 1] >= amountOutMin, 'LibraswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
+        amounts = LibreswapLibrary.getAmountsOut(factory, amountIn, path);
+        require(amounts[amounts.length - 1] >= amountOutMin, 'LibreswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
         TransferHelper.safeTransferFrom(
-            path[0], msg.sender, LibraswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
+            path[0], msg.sender, LibreswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
         _swap(amounts, path, to);
     }
@@ -276,10 +248,10 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         address to,
         uint deadline
     ) external virtual override ensure(deadline) returns (uint[] memory amounts) {
-        amounts = LibraswapLibrary.getAmountsIn(factory, amountOut, path);
-        require(amounts[0] <= amountInMax, 'LibraswapRouter: EXCESSIVE_INPUT_AMOUNT');
+        amounts = LibreswapLibrary.getAmountsIn(factory, amountOut, path);
+        require(amounts[0] <= amountInMax, 'LibreswapRouter: EXCESSIVE_INPUT_AMOUNT');
         TransferHelper.safeTransferFrom(
-            path[0], msg.sender, LibraswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
+            path[0], msg.sender, LibreswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
         _swap(amounts, path, to);
     }
@@ -291,11 +263,11 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         ensure(deadline)
         returns (uint[] memory amounts)
     {
-        require(path[0] == WETH, 'LibraswapRouter: INVALID_PATH');
-        amounts = LibraswapLibrary.getAmountsOut(factory, msg.value, path);
-        require(amounts[amounts.length - 1] >= amountOutMin, 'LibraswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
+        require(path[0] == WETH, 'LibreswapRouter: INVALID_PATH');
+        amounts = LibreswapLibrary.getAmountsOut(factory, msg.value, path);
+        require(amounts[amounts.length - 1] >= amountOutMin, 'LibreswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
         IWETH(WETH).deposit{value: amounts[0]}();
-        assert(IWETH(WETH).transfer(LibraswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
+        assert(IWETH(WETH).transfer(LibreswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
         _swap(amounts, path, to);
     }
     function swapTokensForExactETH(uint amountOut, uint amountInMax, address[] calldata path, address to, uint deadline)
@@ -305,11 +277,11 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         ensure(deadline)
         returns (uint[] memory amounts)
     {
-        require(path[path.length - 1] == WETH, 'LibraswapRouter: INVALID_PATH');
-        amounts = LibraswapLibrary.getAmountsIn(factory, amountOut, path);
-        require(amounts[0] <= amountInMax, 'LibraswapRouter: EXCESSIVE_INPUT_AMOUNT');
+        require(path[path.length - 1] == WETH, 'LibreswapRouter: INVALID_PATH');
+        amounts = LibreswapLibrary.getAmountsIn(factory, amountOut, path);
+        require(amounts[0] <= amountInMax, 'LibreswapRouter: EXCESSIVE_INPUT_AMOUNT');
         TransferHelper.safeTransferFrom(
-            path[0], msg.sender, LibraswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
+            path[0], msg.sender, LibreswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
         _swap(amounts, path, address(this));
         IWETH(WETH).withdraw(amounts[amounts.length - 1]);
@@ -322,11 +294,11 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         ensure(deadline)
         returns (uint[] memory amounts)
     {
-        require(path[path.length - 1] == WETH, 'LibraswapRouter: INVALID_PATH');
-        amounts = LibraswapLibrary.getAmountsOut(factory, amountIn, path);
-        require(amounts[amounts.length - 1] >= amountOutMin, 'LibraswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
+        require(path[path.length - 1] == WETH, 'LibreswapRouter: INVALID_PATH');
+        amounts = LibreswapLibrary.getAmountsOut(factory, amountIn, path);
+        require(amounts[amounts.length - 1] >= amountOutMin, 'LibreswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
         TransferHelper.safeTransferFrom(
-            path[0], msg.sender, LibraswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
+            path[0], msg.sender, LibreswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]
         );
         _swap(amounts, path, address(this));
         IWETH(WETH).withdraw(amounts[amounts.length - 1]);
@@ -340,102 +312,19 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         ensure(deadline)
         returns (uint[] memory amounts)
     {
-        require(path[0] == WETH, 'LibraswapRouter: INVALID_PATH');
-        amounts = LibraswapLibrary.getAmountsIn(factory, amountOut, path);
-        require(amounts[0] <= msg.value, 'LibraswapRouter: EXCESSIVE_INPUT_AMOUNT');
+        require(path[0] == WETH, 'LibreswapRouter: INVALID_PATH');
+        amounts = LibreswapLibrary.getAmountsIn(factory, amountOut, path);
+        require(amounts[0] <= msg.value, 'LibreswapRouter: EXCESSIVE_INPUT_AMOUNT');
         IWETH(WETH).deposit{value: amounts[0]}();
-        assert(IWETH(WETH).transfer(LibraswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
+        assert(IWETH(WETH).transfer(LibreswapLibrary.pairFor(factory, path[0], path[1]), amounts[0]));
         _swap(amounts, path, to);
         // refund dust eth, if any
         if (msg.value > amounts[0]) TransferHelper.safeTransferETH(msg.sender, msg.value - amounts[0]);
     }
-/*
-    // **** SWAP (supporting fee-on-transfer tokens) ****
-    // requires the initial amount to have already been sent to the first pair
-    function _swapSupportingFeeOnTransferTokens(address[] memory path, address _to) internal virtual {
-        for (uint i; i < path.length - 1; i++) {
-            (address input, address output) = (path[i], path[i + 1]);
-            (address token0,) = LibraswapLibrary.sortTokens(input, output);
-            ILibraPair pair = ILibraPair(LibraswapLibrary.pairFor(factory, input, output));
-            uint amountInput;
-            uint amountOutput;
-            { // scope to avoid stack too deep errors
-            (uint reserve0, uint reserve1,) = pair.getReserves();
-            (uint reserveInput, uint reserveOutput) = input == token0 ? (reserve0, reserve1) : (reserve1, reserve0);
-            amountInput = IERC20(input).balanceOf(address(pair)).sub(reserveInput);
-            amountOutput = LibraswapLibrary.getAmountOut(amountInput, reserveInput, reserveOutput);
-            }
-            (uint amount0Out, uint amount1Out) = input == token0 ? (uint(0), amountOutput) : (amountOutput, uint(0));
-            address to = i < path.length - 2 ? LibraswapLibrary.pairFor(factory, output, path[i + 2]) : _to;
-            pair.swap(amount0Out, amount1Out, to, new bytes(0));
-        }
-    }
-    function swapExactTokensForTokensSupportingFeeOnTransferTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    ) external virtual override ensure(deadline) {
-        TransferHelper.safeTransferFrom(
-            path[0], msg.sender, LibraswapLibrary.pairFor(factory, path[0], path[1]), amountIn
-        );
-        uint balanceBefore = IERC20(path[path.length - 1]).balanceOf(to);
-        _swapSupportingFeeOnTransferTokens(path, to);
-        require(
-            IERC20(path[path.length - 1]).balanceOf(to).sub(balanceBefore) >= amountOutMin,
-            'LibraswapRouter: INSUFFICIENT_OUTPUT_AMOUNT'
-        );
-    }
-    function swapExactETHForTokensSupportingFeeOnTransferTokens(
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    )
-        external
-        virtual
-        override
-        payable
-        ensure(deadline)
-    {
-        require(path[0] == WETH, 'LibraswapRouter: INVALID_PATH');
-        uint amountIn = msg.value;
-        IWETH(WETH).deposit{value: amountIn}();
-        assert(IWETH(WETH).transfer(LibraswapLibrary.pairFor(factory, path[0], path[1]), amountIn));
-        uint balanceBefore = IERC20(path[path.length - 1]).balanceOf(to);
-        _swapSupportingFeeOnTransferTokens(path, to);
-        require(
-            IERC20(path[path.length - 1]).balanceOf(to).sub(balanceBefore) >= amountOutMin,
-            'LibraswapRouter: INSUFFICIENT_OUTPUT_AMOUNT'
-        );
-    }
-    function swapExactTokensForETHSupportingFeeOnTransferTokens(
-        uint amountIn,
-        uint amountOutMin,
-        address[] calldata path,
-        address to,
-        uint deadline
-    )
-        external
-        virtual
-        override
-        ensure(deadline)
-    {
-        require(path[path.length - 1] == WETH, 'LibraswapRouter: INVALID_PATH');
-        TransferHelper.safeTransferFrom(
-            path[0], msg.sender, LibraswapLibrary.pairFor(factory, path[0], path[1]), amountIn
-        );
-        _swapSupportingFeeOnTransferTokens(path, address(this));
-        uint amountOut = IERC20(WETH).balanceOf(address(this));
-        require(amountOut >= amountOutMin, 'LibraswapRouter: INSUFFICIENT_OUTPUT_AMOUNT');
-        IWETH(WETH).withdraw(amountOut);
-        TransferHelper.safeTransferETH(to, amountOut);
-    }
-*/
+
     // **** LIBRARY FUNCTIONS ****
     function quote(uint amountA, uint reserveA, uint reserveB) public pure virtual override returns (uint amountB) {
-        return LibraswapLibrary.quote(amountA, reserveA, reserveB);
+        return LibreswapLibrary.quote(amountA, reserveA, reserveB);
     }
 
     function getAmountOut(uint amountIn, uint reserveIn, uint reserveOut)
@@ -445,7 +334,7 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         override
         returns (uint amountOut)
     {
-        return LibraswapLibrary.getAmountOut(amountIn, reserveIn, reserveOut);
+        return LibreswapLibrary.getAmountOut(amountIn, reserveIn, reserveOut);
     }
 
     function getAmountIn(uint amountOut, uint reserveIn, uint reserveOut)
@@ -455,7 +344,7 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         override
         returns (uint amountIn)
     {
-        return LibraswapLibrary.getAmountIn(amountOut, reserveIn, reserveOut);
+        return LibreswapLibrary.getAmountIn(amountOut, reserveIn, reserveOut);
     }
 
     function getAmountsOut(uint amountIn, address[] memory path)
@@ -465,7 +354,7 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         override
         returns (uint[] memory amounts)
     {
-        return LibraswapLibrary.getAmountsOut(factory, amountIn, path);
+        return LibreswapLibrary.getAmountsOut(factory, amountIn, path);
     }
 
     function getAmountsIn(uint amountOut, address[] memory path)
@@ -475,6 +364,6 @@ contract LibraswapRouter02 is ILibraswapRouter02 {
         override
         returns (uint[] memory amounts)
     {
-        return LibraswapLibrary.getAmountsIn(factory, amountOut, path);
+        return LibreswapLibrary.getAmountsIn(factory, amountOut, path);
     }
 }

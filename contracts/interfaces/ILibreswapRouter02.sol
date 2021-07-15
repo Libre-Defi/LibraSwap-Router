@@ -1,8 +1,8 @@
 pragma solidity >=0.6.2;
 
-import './ILibraswapRouter01.sol';
+import './ILibreswapRouter01.sol';
 
-interface ILibraswapRouter02 is ILibraswapRouter01 {
+interface ILibreswapRouter02 is ILibreswapRouter01 {
     function removeLiquidityETHSupportingFeeOnTransferTokens(
         address token,
         uint liquidity,

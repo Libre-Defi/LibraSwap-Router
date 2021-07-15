@@ -2,19 +2,19 @@ pragma solidity =0.6.6;
 
 import './libraries/TransferHelper.sol';
 
-import './interfaces/ILibraswapMigrator.sol';
-import './interfaces/V1/ILibraswapV1Factory.sol';
-import './interfaces/V1/ILibraswapV1Exchange.sol';
-import './interfaces/ILibraswapRouter01.sol';
+import './interfaces/ILibreswapMigrator.sol';
+import './interfaces/V1/ILibreswapV1Factory.sol';
+import './interfaces/V1/ILibreswapV1Exchange.sol';
+import './interfaces/ILibreswapRouter01.sol';
 import './interfaces/IERC20.sol';
 
-contract LibraswapMigrator is ILibraswapMigrator {
-    ILibraswapV1Factory immutable factoryV1;
-    ILibraswapRouter01 immutable router;
+contract LibreswapMigrator is ILibreswapMigrator {
+    ILibreswapV1Factory immutable factoryV1;
+    ILibreswapRouter01 immutable router;
 
     constructor(address _factoryV1, address _router) public {
-        factoryV1 = ILibraswapV1Factory(_factoryV1);
-        router = ILibraswapRouter01(_router);
+        factoryV1 = ILibreswapV1Factory(_factoryV1);
+        router = ILibreswapRouter01(_router);
     }
 
     // needs to accept ETH from any v1 exchange and the router. ideally this could be enforced, as in the router,
@@ -25,7 +25,7 @@ contract LibraswapMigrator is ILibraswapMigrator {
         external
         override
     {
-        ILibraswapV1Exchange exchangeV1 = ILibraswapV1Exchange(factoryV1.getExchange(token));
+        ILibreswapV1Exchange exchangeV1 = ILibreswapV1Exchange(factoryV1.getExchange(token));
         uint liquidityV1 = exchangeV1.balanceOf(msg.sender);
         require(exchangeV1.transferFrom(msg.sender, address(this), liquidityV1), 'TRANSFER_FROM_FAILED');
         (uint amountETHV1, uint amountTokenV1) = exchangeV1.removeLiquidity(liquidityV1, 1, 1, uint(-1));
